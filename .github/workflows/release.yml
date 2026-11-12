@@ -1,0 +1,85 @@
+name: build-and-release
+
+on:
+  push:
+    tags: ["v*"]
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  encoders:
+    name: encoders (${{ matrix.arch }})
+    strategy:
+      matrix:
+        include:
+          - { arch: arm64,  runner: macos-latest }
+          - { arch: x86_64, runner: macos-15-intel }
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache encoders
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: vendor/${{ matrix.arch }}
+          key: encoders-${{ matrix.arch }}-${{ hashFiles('scripts/build-encoders.sh') }}
+      - name: Build tools
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: brew install nasm
+      - name: Build cwebp + avifenc (pinned commits, static)
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: scripts/build-encoders.sh ${{ matrix.arch }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vendor-${{ matrix.arch }}
+          path: vendor/${{ matrix.arch }}
+
+  app:
+    needs: encoders
+    runs-on: macos-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { name: vendor-arm64, path: vendor/arm64 }
+      - uses: actions/download-artifact@v4
+        with: { name: vendor-x86_64, path: vendor/x86_64 }
+      - run: chmod +x vendor/*/*
+      - name: Version must match the tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: test "v$(cat VERSION)" = "${GITHUB_REF_NAME}"
+      - name: Build universal app
+        run: scripts/build-app.sh
+      - name: Smoke test (CLI on sample images, every format)
+        run: tests/smoke.sh build/Featherpix.app
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Featherpix-macOS
+          path: |
+            build/Featherpix-macOS.zip
+            build/Featherpix-macOS.pkg
+            build/*.sha256
+      - name: Build provenance attestation
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            build/Featherpix-macOS.zip
+            build/Featherpix-macOS.pkg
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            build/Featherpix-macOS.pkg
+            build/Featherpix-macOS.zip
+            build/Featherpix-macOS.pkg.sha256
+            build/Featherpix-macOS.zip.sha256
+          body_path: docs/release-notes.md

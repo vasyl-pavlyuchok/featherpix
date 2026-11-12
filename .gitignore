@@ -1,0 +1,4 @@
+.build-encoders/
+vendor/
+build/
+.DS_Store
