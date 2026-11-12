@@ -6,6 +6,9 @@ let set = FileManager.default.temporaryDirectory.appendingPathComponent("AppIcon
 try? FileManager.default.removeItem(at: set)
 try! FileManager.default.createDirectory(at: set, withIntermediateDirectories: true)
 
+// Artwork: Resources/icon-source.jpg (generated with Google Gemini, square, full-bleed).
+let artwork = NSImage(contentsOf: root.appendingPathComponent("Resources/icon-source.jpg"))
+
 func render(_ px: Int) -> Data {
     let s = CGFloat(px)
     let rep = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: px, pixelsHigh: px, bitsPerSample: 8,
@@ -16,20 +19,21 @@ func render(_ px: Int) -> Data {
     // macOS icon grid: 824/1024 body with rounded corners.
     let inset = s * 100 / 1024, body = NSRect(x: inset, y: inset, width: s - 2 * inset, height: s - 2 * inset)
     let path = NSBezierPath(roundedRect: body, xRadius: body.width * 0.225, yRadius: body.width * 0.225)
-    NSGradient(colors: [NSColor(srgbRed: 0.11, green: 0.73, blue: 0.69, alpha: 1),
-                        NSColor(srgbRed: 0.25, green: 0.33, blue: 0.86, alpha: 1)])!.draw(in: path, angle: -60)
-    let names = ["feather", "leaf.fill"]
-    for n in names {
-        if let sym = NSImage(systemSymbolName: n, accessibilityDescription: nil)?
-            .withSymbolConfiguration(.init(pointSize: s * 0.42, weight: .regular)) {
-            let tinted = NSImage(size: sym.size, flipped: false) { r in
-                sym.draw(in: r); NSColor.white.set(); r.fill(using: .sourceAtop); return true
-            }
-            let sz = tinted.size
-            tinted.draw(in: NSRect(x: (s - sz.width) / 2, y: (s - sz.height) / 2, width: sz.width, height: sz.height))
-            break
-        }
+    // Soft drop shadow like system icons.
+    NSGraphicsContext.saveGraphicsState()
+    let sh = NSShadow(); sh.shadowColor = NSColor.black.withAlphaComponent(0.28)
+    sh.shadowBlurRadius = s * 0.018; sh.shadowOffset = NSSize(width: 0, height: -s * 0.008); sh.set()
+    NSColor.black.setFill(); path.fill()
+    NSGraphicsContext.restoreGraphicsState()
+    NSGraphicsContext.saveGraphicsState()
+    path.addClip()
+    if let art = artwork {
+        art.draw(in: body, from: .zero, operation: .copy, fraction: 1)
+    } else {
+        NSGradient(colors: [NSColor(srgbRed: 0.11, green: 0.73, blue: 0.69, alpha: 1),
+                            NSColor(srgbRed: 0.25, green: 0.33, blue: 0.86, alpha: 1)])!.draw(in: path, angle: -60)
     }
+    NSGraphicsContext.restoreGraphicsState()
     NSGraphicsContext.restoreGraphicsState()
     return rep.representation(using: .png, properties: [:])!
 }

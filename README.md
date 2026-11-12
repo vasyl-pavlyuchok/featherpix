@@ -1,6 +1,8 @@
 🇪🇸 **Español** | [🇬🇧 English](README.en.md)
 
-# 🍃 Featherpix
+<img src="docs/icon.png" width="96" align="left" alt="">
+
+# Featherpix
 
 [![Release](https://img.shields.io/github/v/release/vasyl-pavlyuchok/featherpix?label=versi%C3%B3n&color=14b8a6)](../../releases/latest)
 [![Licencia](https://img.shields.io/badge/licencia-MIT-blue)](LICENSE)
