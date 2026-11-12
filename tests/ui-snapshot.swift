@@ -24,7 +24,7 @@ struct Snap {
             m.summary = s
             m.lastOutput = URL(fileURLWithPath: "/tmp")
         }
-        let host = NSHostingView(rootView: ContentView(model: m).frame(width: 600, height: m.total > 0 ? 760 : 520))
+        let host = NSHostingView(rootView: ContentView(model: m).frame(width: 600, height: m.total > 0 ? 760 : 520).background(Color(nsColor: .windowBackgroundColor)))
         host.appearance = NSApp.appearance
         host.frame = NSRect(x: 0, y: 0, width: 600, height: m.total > 0 ? 760 : 520)
         let win = NSWindow(contentRect: host.frame, styleMask: [.titled], backing: .buffered, defer: false)
