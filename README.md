@@ -22,6 +22,8 @@ Tenía 325 imágenes de referencia de diseño (30 MB) que quería subir a Claude
 
 Featherpix lleva dentro los codificadores de referencia, compilados desde su código fuente: **libwebp** para WebP, **libavif** con el codificador AV1 de AOMedia para AVIF y **mozjpeg** de Mozilla para JPEG. No hace falta instalar nada más.
 
+**Alternativas:** si lo que buscas es que se optimice solo todo lo que copias o guardas en ciertas carpetas, [Clop](https://github.com/FuzzyIdeas/Clop) hace eso muy bien. Featherpix es más sencillo: arrastras, eliges el formato y listo.
+
 ## Resultados medidos
 
 Lote real: 325 láminas de diseño ya comprimidas en JPEG (30,98 MB). Detalle completo en [docs/benchmark.md](docs/benchmark.md).

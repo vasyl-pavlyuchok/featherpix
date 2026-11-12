@@ -22,6 +22,8 @@ I had 325 design reference images (30 MB) to upload to Claude, and the browser o
 
 Featherpix bundles the reference encoders, built from source: **libwebp** for WebP, **libavif** with AOMedia's AV1 encoder for AVIF, and Mozilla's **mozjpeg** for JPEG. Nothing else to install.
 
+**Alternatives:** if you want everything you copy or save to certain folders optimized automatically, [Clop](https://github.com/FuzzyIdeas/Clop) does that very well. Featherpix is simpler: drop, pick a format, done.
+
 ## Measured results
 
 Real batch: 325 design boards, already-compressed JPEGs (30.98 MB). Full details in [docs/benchmark.md](docs/benchmark.md).
