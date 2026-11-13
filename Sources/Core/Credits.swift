@@ -32,5 +32,5 @@ public enum FormatsInfo {
     public static let imageInputs = ["JPG", "PNG", "HEIC", "TIFF", "WebP", "AVIF", "GIF", "BMP"]
     public static var imageOutputs: [String] { OutputFormat.allCases.map(\.label) }
     public static let videoInputs = ["MP4", "MOV", "M4V"]
-    public static let videoOutputs = ["MP4 (H.264)", "MP4 (HEVC)", "WebP poster"]
+    public static let videoOutputs = ["MP4 (H.264)", "MP4 (HEVC)", "WebM (VP9 + Opus)", "WebP poster"]
 }

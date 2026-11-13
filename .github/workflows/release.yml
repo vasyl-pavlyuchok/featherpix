@@ -20,20 +20,20 @@ jobs:
           - { arch: x86_64, runner: macos-15-intel }
     runs-on: ${{ matrix.runner }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Cache encoders
         id: cache
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: vendor/${{ matrix.arch }}
-          key: encoders-${{ matrix.arch }}-${{ hashFiles('scripts/build-encoders.sh') }}
+          key: encoders-${{ matrix.arch }}-${{ hashFiles('scripts/build-encoders.sh', 'scripts/build-ffmpeg.sh') }}
       - name: Build tools
         if: steps.cache.outputs.cache-hit != 'true'
         run: brew install nasm
-      - name: Build cwebp + avifenc (pinned commits, static)
+      - name: Build cwebp + avifenc + cjpeg + LGPL ffmpeg (pinned commits, static)
         if: steps.cache.outputs.cache-hit != 'true'
         run: scripts/build-encoders.sh ${{ matrix.arch }}
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: vendor-${{ matrix.arch }}
           path: vendor/${{ matrix.arch }}
@@ -46,10 +46,10 @@ jobs:
       id-token: write
       attestations: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with: { name: vendor-arm64, path: vendor/arm64 }
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with: { name: vendor-x86_64, path: vendor/x86_64 }
       - run: chmod +x vendor/*/*
       - name: Version must match the tag
@@ -62,7 +62,7 @@ jobs:
       # No release without a video test that really ran (council PR117): synthetic clips only, never real footage.
       - name: Video smoke test (every preset, H.264 and HEVC, rotated, silent, broken file)
         run: tests/video-smoke.sh build/Featherpix.app
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: Featherpix-macOS
           path: |
@@ -71,18 +71,24 @@ jobs:
             build/*.sha256
       - name: Build provenance attestation
         if: startsWith(github.ref, 'refs/tags/v')
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
         with:
           subject-path: |
             build/Featherpix-macOS.zip
             build/Featherpix-macOS.pkg
+      # LGPL 2.1 §4: the corresponding source of the bundled ffmpeg travels with every release.
+      - name: Corresponding source (ffmpeg, libvpx, opus)
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: scripts/source-tarballs.sh
       - name: Publish release
         if: startsWith(github.ref, 'refs/tags/v')
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
         with:
           files: |
             build/Featherpix-macOS.pkg
             build/Featherpix-macOS.zip
             build/Featherpix-macOS.pkg.sha256
             build/Featherpix-macOS.zip.sha256
+            build/*-source.tar.gz
+            build/*-source.tar.gz.sha256
           body_path: docs/release-notes.md

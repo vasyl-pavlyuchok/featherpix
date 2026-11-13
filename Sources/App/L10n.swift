@@ -28,7 +28,7 @@ enum L {
     static var dropVideoTitle: String { t("Drop videos here", "Suelta aquí tus vídeos") }
     static var dropVideoHint: String { t("Originals are never touched. Results go next to them as “<name>-web.mp4”.",
                                          "Los originales no se tocan. El resultado se guarda al lado como «<nombre>-web.mp4».") }
-    static var videoFormatsLine: String { t("In: MP4, MOV, M4V  ·  Out: MP4 (H.264 or HEVC)", "Entrada: MP4, MOV, M4V  ·  Salida: MP4 (H.264 o HEVC)") }
+    static var videoFormatsLine: String { t("In: MP4, MOV, M4V  ·  Out: MP4 (H.264 or HEVC) or WebM (VP9)", "Entrada: MP4, MOV, M4V  ·  Salida: MP4 (H.264 o HEVC) o WebM (VP9)") }
     static var videoUse: String { t("What is it for?", "¿Para qué es?") }
     static func videoPreset(_ p: VideoPreset) -> (String, String) {
         switch p {
@@ -38,12 +38,17 @@ enum L {
         }
     }
     static var outputFormat: String { t("Output", "Salida") }
-    static var soon: String { t("soon", "pronto") }
-    static var webmSoon: String { t("WebM arrives in version 2.1", "WebM llega en la versión 2.1") }
     static func codecHint(_ c: VideoCodec) -> String {
-        c == .h264 ? t("Plays in every browser and device.", "Se ve en cualquier navegador y dispositivo.")
-                   : t("About 40 % smaller; Safari, Chrome and Edge on recent devices.", "Un 40 % más ligero; Safari, Chrome y Edge en equipos recientes.")
+        switch c {
+        case .h264: return t("Plays in every browser and device.", "Se ve en cualquier navegador y dispositivo.")
+        case .hevc: return t("About 40 % smaller; Safari, Chrome and Edge on recent devices.", "Un 40 % más ligero; Safari, Chrome y Edge en equipos recientes.")
+        case .vp9: return t("The lightest for the web. Adds an MP4 copy for older iPhones.", "Lo más ligero para la web. Añade una copia MP4 para iPhone antiguos.")
+        }
     }
+    static func codecChip(_ c: VideoCodec) -> (String, String) {
+        switch c { case .h264: return ("MP4", "H.264"); case .hevc: return ("HEVC", "H.265"); case .vp9: return ("WebM", "VP9") }
+    }
+    static var withFallback: String { t("+ MP4 fallback", "+ MP4 de respaldo") }
     static var keepAudio: String { t("Keep audio", "Conservar el audio") }
     static var forYourWeb: String { t("Paste into your page", "Para pegar en tu web") }
     static var copyHTML: String { t("Copy HTML", "Copiar HTML") }

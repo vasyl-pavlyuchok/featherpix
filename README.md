@@ -8,9 +8,9 @@
 [![Licencia](https://img.shields.io/badge/licencia-MIT-blue)](LICENSE)
 [![macOS](https://img.shields.io/badge/macOS-13%2B%20%C2%B7%20Intel%20%7C%20Apple%20Silicon-black?logo=apple)](../../releases/latest)
 
-**Aligera tus imágenes y tus vídeos sin que se note.** Suelta una imagen o una carpeta entera y Featherpix la convierte a **WebP, AVIF o JPEG**; suelta un vídeo y lo deja en un **MP4** ligero para la web (H.264 o HEVC), con portada en bucle lista para pegar. Es gratis y de código abierto, funciona sin conexión y no envía nada a ningún sitio.
+**Aligera tus imágenes y tus vídeos sin que se note.** Suelta una imagen o una carpeta entera y Featherpix la convierte a **WebP, AVIF o JPEG**; suelta un vídeo y lo deja en un **MP4 o WebM** ligero para la web (H.264, HEVC o VP9), con portada en bucle lista para pegar. Es gratis y de código abierto, funciona sin conexión y no envía nada a ningún sitio.
 
-Diseñado por **Vasyl Pavlyuchok** & **Claude** · v2.0.0
+Diseñado por **Vasyl Pavlyuchok** & **Claude** · v2.1.0
 
 <p align="center"><img src="docs/ui-video-results-es.png" width="560" alt="Ventana de Featherpix"></p>
 
@@ -91,9 +91,9 @@ Entradas admitidas: JPEG, PNG, HEIC/HEIF, TIFF, WebP, AVIF, GIF (primer fotogram
 
 ### Vídeos (desde la v2.0)
 
-- **Entrada:** MP4, MOV y M4V. **Salida:** MP4 con H.264 (se ve en todas partes) o HEVC (un 40 % más ligero en equipos recientes). WebM llega en la v2.1.
+- **Entrada:** MP4, MOV y M4V. **Salida:** MP4 con H.264 (se ve en todas partes), HEVC (un 40 % más ligero en equipos recientes) o **WebM con VP9 y audio Opus** (desde la v2.1, lo más ligero para la web; por defecto añade una copia MP4 para navegadores antiguos y el código `<video>` lleva las dos).
 - **Para qué es:** *Web* (≤1920 px, con audio), *Portada en bucle* (≤1280 px, sin audio, con imagen fija `.webp` y el código `<video>` listo para copiar) y *Máxima calidad* (tamaño original).
-- Usa el codificador de vídeo de macOS (VideoToolbox): no añade peso a la app y no incluye código GPL.
+- MP4 y HEVC salen del codificador de vídeo de macOS (VideoToolbox). WebM sale de un **ffmpeg reducido con licencia LGPL** (sin piezas GPL, sin red: solo lee y escribe ficheros) que va dentro de la app como programa aparte.
 - Respeta la rotación de los vídeos del móvil, coloca el índice al principio del fichero para que empiece a reproducirse antes de descargarse entero, y nunca toca el original.
 - `featherpix-cli video -p loop portada.mp4` hace lo mismo desde la terminal.
 
@@ -151,6 +151,10 @@ Arrastra **Featherpix** de Aplicaciones a la Papelera. Si creaste el enlace de l
 
 ## Changelog
 
+### v2.1.0 — 13-nov-2026
+- **WebM** (VP9 + audio Opus) en la pestaña Vídeos y en `featherpix-cli video -c vp9`. Por defecto añade una copia MP4 de respaldo y el código `<video>` incluye las dos fuentes (WebM primero). `--no-fallback` la omite.
+- Incluye un ffmpeg LGPL compilado desde su código fuente en un commit fijado, con solo lo necesario (sin red, sin GPL). Su licencia y su origen van dentro de la app.
+
 ### v2.0.0 — 13-nov-2026
 - Pestaña **Vídeos**: MP4 (H.264 o HEVC) con tres usos (web, portada en bucle con póster y código HTML, máxima calidad).
 - Interfaz nueva: cada pestaña tiene su propio ambiente (menta para fotos, brasa para vídeos) y una cifra de ahorro animada.
@@ -165,4 +169,4 @@ Arrastra **Featherpix** de Aplicaciones a la Papelera. Si creaste el enlace de l
 
 ## Licencia
 
-[MIT](LICENSE) © 2026 Vasyl Pavlyuchok & Claude. Los codificadores incluidos tienen sus propias licencias libres (BSD, IJG, zlib): ver [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Los textos completos van dentro de la app.
+[MIT](LICENSE) © 2026 Vasyl Pavlyuchok & Claude. Los codificadores incluidos tienen sus propias licencias libres (BSD, IJG, zlib y LGPL 2.1 para ffmpeg): ver [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Los textos completos van dentro de la app. ffmpeg (LGPL 2.1+, https://ffmpeg.org) va como programa aparte; su código fuente correspondiente se adjunta en cada release de GitHub y puedes sustituirlo por tu propia compilación.

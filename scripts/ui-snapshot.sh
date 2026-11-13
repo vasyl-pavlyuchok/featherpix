@@ -15,3 +15,5 @@ FEATHERPIX_LANG=es "$BIN" "$OUT/ui-results-es.png" --dark --results
 "$BIN" "$OUT/ui-video.png" --dark --video
 FEATHERPIX_LANG=es "$BIN" "$OUT/ui-video-working-es.png" --dark --video --working
 FEATHERPIX_LANG=es "$BIN" "$OUT/ui-video-results-es.png" --dark --video --results
+FEATHERPIX_LANG=es "$BIN" "$OUT/ui-video-webm-es.png" --dark --video --webm
+FEATHERPIX_LANG=es "$BIN" "$OUT/ui-video-webm-results-es.png" --dark --video --webm --results

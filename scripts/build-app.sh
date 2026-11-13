@@ -2,7 +2,7 @@
 # Builds Featherpix.app (and featherpix-cli) from source with swiftc — no Xcode project needed.
 # Usage: scripts/build-app.sh            -> universal (x86_64 + arm64) if vendor/ has both encoder sets
 #        ARCHS=x86_64 scripts/build-app.sh
-# Needs: vendor/<arch>/{cwebp,avifenc} from scripts/build-encoders.sh
+# Needs: vendor/<arch>/{cwebp,avifenc,cjpeg,ffmpeg} from scripts/build-encoders.sh
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
@@ -22,16 +22,16 @@ lipo_or_copy() { # out in...
   if [[ $# -eq 1 ]]; then cp "$1" "$out"; else lipo -create "$@" -output "$out"; fi
 }
 
-app_bins=(); cli_bins=(); cwebp_bins=(); avif_bins=(); cjpeg_bins=()
+app_bins=(); cli_bins=(); cwebp_bins=(); avif_bins=(); cjpeg_bins=(); ffmpeg_bins=()
 for a in $ARCHS; do
-  [[ -x "vendor/$a/cwebp" && -x "vendor/$a/avifenc" && -x "vendor/$a/cjpeg" ]] || { echo "missing vendor/$a encoders (run scripts/build-encoders.sh on $a)" >&2; exit 1; }
+  [[ -x "vendor/$a/cwebp" && -x "vendor/$a/avifenc" && -x "vendor/$a/cjpeg" && -x "vendor/$a/ffmpeg" ]] || { echo "missing vendor/$a encoders (run scripts/build-encoders.sh on $a)" >&2; exit 1; }
   echo "• swiftc $a"
   swiftc -swift-version 5 -O -parse-as-library -target "$a-apple-macos$MIN_MACOS" \
     "${CORE[@]}" "${APP_SRC[@]}" -o "$BUILD/obj/Featherpix-$a"
   swiftc -swift-version 5 -O -target "$a-apple-macos$MIN_MACOS" \
     "${CORE[@]}" "${CLI_SRC[@]}" -o "$BUILD/obj/featherpix-cli-$a"
   app_bins+=("$BUILD/obj/Featherpix-$a"); cli_bins+=("$BUILD/obj/featherpix-cli-$a")
-  cwebp_bins+=("vendor/$a/cwebp"); avif_bins+=("vendor/$a/avifenc"); cjpeg_bins+=("vendor/$a/cjpeg")
+  cwebp_bins+=("vendor/$a/cwebp"); avif_bins+=("vendor/$a/avifenc"); cjpeg_bins+=("vendor/$a/cjpeg"); ffmpeg_bins+=("vendor/$a/ffmpeg")
 done
 
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources/bin"
@@ -39,12 +39,15 @@ lipo_or_copy "$APP/Contents/MacOS/Featherpix" "${app_bins[@]}"
 lipo_or_copy "$APP/Contents/Resources/bin/cwebp" "${cwebp_bins[@]}"
 lipo_or_copy "$APP/Contents/Resources/bin/avifenc" "${avif_bins[@]}"
 lipo_or_copy "$APP/Contents/Resources/bin/cjpeg" "${cjpeg_bins[@]}"
+lipo_or_copy "$APP/Contents/Resources/bin/ffmpeg" "${ffmpeg_bins[@]}"
 lipo_or_copy "$APP/Contents/Resources/bin/featherpix-cli" "${cli_bins[@]}"
 cp Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
 cp LICENSE THIRD_PARTY_NOTICES.md "$APP/Contents/Resources/"
 mkdir -p "$APP/Contents/Resources/licenses"
 for a in $ARCHS; do cp -n vendor/$a/licenses/* "$APP/Contents/Resources/licenses/" 2>/dev/null || true; done
-ls "$APP/Contents/Resources/licenses/" | grep -q libavif || { echo "third-party license texts missing" >&2; exit 1; }
+for l in libavif libwebp-COPYING libwebp-PATENTS mozjpeg-LICENSE ffmpeg-COPYING.LGPLv2.1 ffmpeg-LICENSE.md ffmpeg-SOURCE-AND-BUILD libvpx-LICENSE libvpx-PATENTS opus-COPYING; do
+  ls "$APP/Contents/Resources/licenses/" | grep -q "$l" || { echo "third-party license text missing: $l" >&2; exit 1; }
+done
 sed "s/__VERSION__/$VERSION/g" Resources/Info.plist > "$APP/Contents/Info.plist"
 printf 'APPL????' > "$APP/Contents/PkgInfo"
 

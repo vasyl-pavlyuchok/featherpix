@@ -13,13 +13,27 @@ struct Snap {
         let m = AppModel.shared
         let videoTab = CommandLine.arguments.contains("--video")
         UserDefaults.standard.set(videoTab ? "videos" : "photos", forKey: "tab")
-        if videoTab && CommandLine.arguments.contains("--results") {
+        if videoTab && CommandLine.arguments.contains("--results") && !CommandLine.arguments.contains("--webm") {
             let v = VideoModel.shared
             v.rows = [VideoRow(name: "portada-gemini.mp4", progress: 1, state: .ok,
                                detail: "4,1 MB → 612 KB · 1280×720 · 24 fps · MP4 · H.264 · 480 kb/s · sin audio", saved: 0.85)]
             v.before = 4_100_000; v.after = 612_000
             v.snippet = "<video autoplay muted loop playsinline preload=\"metadata\" poster=\"portada-gemini-poster.webp\">\n  <source src=\"portada-gemini-loop.mp4\" type=\"video/mp4\">\n</video>"
             v.lastOutput = URL(fileURLWithPath: "/tmp")
+        }
+        // Snapshots must not inherit settings from a previous run.
+        UserDefaults.standard.set(VideoCodec.h264.rawValue, forKey: "video.codec")
+        UserDefaults.standard.set(VideoPreset.web.rawValue, forKey: "video.preset")
+        if videoTab && CommandLine.arguments.contains("--webm") {
+            UserDefaults.standard.set(VideoCodec.vp9.rawValue, forKey: "video.codec")
+            UserDefaults.standard.set(VideoPreset.loop.rawValue, forKey: "video.preset")
+            if CommandLine.arguments.contains("--results") {
+                let v = VideoModel.shared
+                v.rows = [VideoRow(name: "portada-gemini.mp4", progress: 1, state: .ok,
+                                   detail: "4,1 MB → 164 KB · 1280×720 · 24 fps · WebM · VP9 · sin audio · + MP4 de respaldo", saved: 0.96)]
+                v.before = 4_100_000; v.after = 164_000
+                v.snippet = "<video autoplay muted loop playsinline preload=\"metadata\" poster=\"portada-gemini-poster.webp\">\n  <source src=\"portada-gemini-loop.webm\" type=\"video/webm\">\n  <source src=\"portada-gemini-loop.mp4\" type=\"video/mp4\">\n</video>"
+            }
         }
         if videoTab && CommandLine.arguments.contains("--working") {
             let v = VideoModel.shared

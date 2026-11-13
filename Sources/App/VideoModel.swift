@@ -107,7 +107,7 @@ final class VideoModel: ObservableObject {
         case .done(let b, let a):
             rows[i].state = .ok
             rows[i].saved = b > 0 ? 1 - Double(a) / Double(b) : nil
-            rows[i].detail = "\(formatBytes(b)) → \(formatBytes(a)) · \(r.info)"
+            rows[i].detail = "\(formatBytes(b)) → \(formatBytes(a)) · \(r.info)" + (r.fallback != nil ? " · " + L.withFallback : "")
             before += b; after += a
             lastOutput = r.output
             if let s = r.htmlSnippet { snippet = s }

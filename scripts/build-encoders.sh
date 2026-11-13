@@ -30,6 +30,7 @@ fetch() { # repo commit dir
   if [[ ! -d "$3/.git" ]]; then git init -q "$3"; git -C "$3" remote add origin "$1"; fi
   git -C "$3" fetch -q --depth 1 origin "$2"
   git -C "$3" checkout -q --force FETCH_HEAD
+  git -C "$3" clean -q -xdf
   [[ "$(git -C "$3" rev-parse HEAD)" == "$2" ]] || { echo "commit mismatch in $3" >&2; exit 1; }
 }
 
@@ -87,4 +88,7 @@ done
 "$OUT/cwebp" -version
 "$OUT/avifenc" --version | head -3
 "$OUT/cjpeg" -version 2>&1 | head -1
+
+# ---- ffmpeg (LGPL, VP9 + Opus for WebM) has its own script
+"$ROOT/scripts/build-ffmpeg.sh" "$ARCH"
 echo "OK: $OUT"

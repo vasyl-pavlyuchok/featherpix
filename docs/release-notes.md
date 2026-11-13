@@ -1,7 +1,15 @@
 ## 🍃 Featherpix
 
-🇬🇧 Make your images much lighter without anyone noticing: WebP, AVIF or JPEG, single images or whole folders, drag and drop. Free, open source, offline.
-🇪🇸 Aligera tus imágenes sin que se note: WebP, AVIF o JPEG, imágenes sueltas o carpetas enteras, con arrastrar y soltar. Gratis, de código abierto y sin conexión.
+🇬🇧 Make your images and videos much lighter without anyone noticing: WebP, AVIF or JPEG for images; MP4 or WebM for videos. Drag and drop. Free, open source, offline.
+🇪🇸 Aligera tus imágenes y tus vídeos sin que se note: WebP, AVIF o JPEG para imágenes; MP4 o WebM para vídeos. Con arrastrar y soltar. Gratis, de código abierto y sin conexión.
+
+### New in 2.1 · Novedades de la 2.1
+
+🇬🇧 **WebM export** (VP9 + Opus audio): the lightest format for the web. By default Featherpix also writes an MP4 fallback for older browsers, and the `<video>` snippet lists both (WebM first). Uses a small LGPL ffmpeg built from source (no GPL parts, no network access); H.264 and HEVC still come from macOS.
+🇪🇸 **Exportar a WebM** (VP9 + audio Opus): el formato más ligero para la web. Por defecto Featherpix añade también una copia MP4 para navegadores antiguos, y el código `<video>` incluye las dos (WebM primero). Usa un ffmpeg reducido con licencia LGPL compilado desde su código fuente (sin piezas GPL y sin acceso a la red); H.264 y HEVC siguen saliendo de macOS.
+
+🇬🇧 Source for the bundled LGPL ffmpeg (and libvpx, opus): see the `*-source.tar.gz` assets below.
+🇪🇸 Código fuente del ffmpeg LGPL incluido (y de libvpx y opus): ver los archivos `*-source.tar.gz` de abajo.
 
 ### New in 2.0 · Novedades de la 2.0
 

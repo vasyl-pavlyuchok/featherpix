@@ -42,6 +42,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         NotificationCenter.default.post(name: .featherpixOpen, object: urls)
     }
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { true }
+    func applicationWillTerminate(_ notification: Notification) { VideoEngine.stopAll() }
 }
 
 struct Row: Identifiable {

@@ -21,7 +21,8 @@ Usage: featherpix-cli [image] [options] <file-or-folder>...
 Video options (MP4, MOV, M4V in · MP4 out):
   -p, --preset web|loop|max     web = H.264 ≤1920px with audio · loop = silent hero loop ≤1280px
                                 + poster .webp + <video> snippet · max = original size, high bitrate
-  -c, --codec h264|hevc         default h264 (plays everywhere); hevc is smaller, newer browsers
+  -c, --codec h264|hevc|vp9     default h264 (plays everywhere); hevc is smaller, newer browsers;
+                                vp9 writes WebM (+ an H.264 MP4 fallback unless --no-fallback)
   -w, --max-width N             0 keeps the original width
       --no-audio / --audio      override the preset
   -q, --quality 50-200          % of the preset bitrate (default 100)
@@ -43,7 +44,15 @@ if args.first == "video" {
 }
 // `featherpix-cli formats` / `featherpix-cli about` only as the sole argument, so a file with that name still works.
 if args.count == 1, ["formats", "about"].contains(args[0]), !FileManager.default.fileExists(atPath: args[0]) { args[0] = "--" + args[0] }
-func die(_ m: String) -> Never { FileHandle.standardError.write(Data("error: \(m)\n".utf8)); exit(2) }
+/// Never let a file name or a tool message drive the terminal (ESC/OSC sequences): control characters become "?".
+func safe(_ s: String) -> String {
+    var v = String.UnicodeScalarView()
+    for u in s.unicodeScalars { v.append((u.value < 0x20 && u != "\n") || (0x7F...0x9F).contains(u.value) ? "?" : u) }
+    return String(v)
+}
+func print(_ s: String) { Swift.print(safe(s)) }
+func warn(_ s: String) { FileHandle.standardError.write(Data((safe(s) + "\n").utf8)) }
+func die(_ m: String) -> Never { warn("error: \(m)"); exit(2) }
 func next(_ flag: String) -> String { guard !args.isEmpty else { die("\(flag) needs a value") }; return args.removeFirst() }
 
 while !args.isEmpty {
@@ -89,7 +98,7 @@ if !qualitySet { o.quality = o.format.defaultQuality }
 if inputs.isEmpty { print(usage); exit(2) }
 
 let (jobs, skipped) = Planner.plan(inputs, options: o)
-for s in skipped { FileHandle.standardError.write(Data("skip: \(s)\n".utf8)) }
+for s in skipped { warn("skip: \(s)") }
 if jobs.isEmpty { die("no supported images found") }
 
 let lock = NSLock()
@@ -130,7 +139,7 @@ func runVideo(_ argv: [String]) -> Never {
             guard let p = VideoPreset(rawValue: val(x)) else { die("preset must be web, loop or max") }
             vo.preset = p
         case "-c", "--codec":
-            guard let c = VideoCodec(rawValue: val(x).lowercased().replacingOccurrences(of: "h265", with: "hevc")) else { die("codec must be h264 or hevc") }
+            guard let c = VideoCodec(rawValue: val(x).lowercased().replacingOccurrences(of: "h265", with: "hevc")) else { die("codec must be h264, hevc or vp9") }
             vo.codec = c
         case "-w", "--max-width":
             guard let w = Int(val(x)), w >= 0 else { die("max width must be 0 or a positive number") }
@@ -142,6 +151,7 @@ func runVideo(_ argv: [String]) -> Never {
             vo.qualityFactor = Double(q) / 100
         case "-o", "--output": vo.outputDirectory = URL(fileURLWithPath: val(x))
         case "--keep-larger": vo.skipIfLarger = false
+        case "--no-fallback": vo.mp4Fallback = false
         case "--": files += a.map { URL(fileURLWithPath: $0) }; a = []
         default:
             if x.hasPrefix("-") { die("unknown option \(x)") }
@@ -149,7 +159,7 @@ func runVideo(_ argv: [String]) -> Never {
         }
     }
     let vids = files.filter { isVideoFile($0) && FileManager.default.fileExists(atPath: $0.path) }
-    for f in files where !vids.contains(f) { FileHandle.standardError.write(Data("skip: \(f.lastPathComponent): not a supported video (MP4, MOV, M4V)\n".utf8)) }
+    for f in files where !vids.contains(f) { warn("skip: \(f.lastPathComponent): not a supported video (MP4, MOV, M4V)") }
     if vids.isEmpty { die("no supported videos found") }
     var failed = 0
     for v in vids {
@@ -159,6 +169,7 @@ func runVideo(_ argv: [String]) -> Never {
             let pct = b > 0 ? Int((1 - Double(af) / Double(b)) * 100) : 0
             print("ok    \(v.lastPathComponent)  \(formatBytes(b)) → \(formatBytes(af))  (-\(pct)%)  \(r.info)")
             if let o = r.output { print("      → \(o.path)") }
+            if let f = r.fallback { print("      → \(f.path)  (MP4 fallback)") }
             if let p = r.poster { print("      → \(p.path)") }
             if let h = r.htmlSnippet { print(h) }
         case .notSmaller(let b, let af):

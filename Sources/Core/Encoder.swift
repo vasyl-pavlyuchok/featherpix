@@ -1,4 +1,5 @@
 import Foundation
+import Darwin
 import CoreGraphics
 import ImageIO
 import UniformTypeIdentifiers
@@ -8,20 +9,24 @@ public struct EncodeError: Error, CustomStringConvertible {
     init(_ d: String) { description = d }
 }
 
-/// Finds the bundled encoders: inside the .app (Contents/Resources/bin), next to the CLI
-/// executable, or in $FEATHERPIX_BIN. Never falls back to $PATH: we only run what we ship.
+/// Finds the bundled tools next to the real executable: Contents/Resources/bin (CLI) or ../Resources/bin (app).
+/// Never argv[0], the current directory, an environment variable or $PATH: we only run what we ship.
 public enum Tools {
+    /// Absolute path of the running executable with symlinks resolved (a symlink in /usr/local/bin is followed).
+    static var executable: URL? {
+        var buf = [CChar](repeating: 0, count: 4 * Int(MAXPATHLEN))
+        if proc_pidpath(getpid(), &buf, UInt32(buf.count)) > 0 {
+            let path = String(cString: buf)
+            if path.hasPrefix("/") { return URL(fileURLWithPath: path).resolvingSymlinksInPath() }
+        }
+        return nil
+    }
     public static func url(_ name: String) throws -> URL {
-        var candidates: [URL] = []
-        if let env = ProcessInfo.processInfo.environment["FEATHERPIX_BIN"] {
-            candidates.append(URL(fileURLWithPath: env).appendingPathComponent(name))
-        }
-        if let res = Bundle.main.resourceURL {
-            candidates.append(res.appendingPathComponent("bin").appendingPathComponent(name))
-        }
-        let exe = URL(fileURLWithPath: CommandLine.arguments[0]).resolvingSymlinksInPath()
-        candidates.append(exe.deletingLastPathComponent().appendingPathComponent(name))
-        for c in candidates where FileManager.default.isExecutableFile(atPath: c.path) { return c }
+        guard let exe = executable else { throw EncodeError("cannot locate the Featherpix executable") }
+        let dir = exe.deletingLastPathComponent()
+        let candidates = [dir.appendingPathComponent(name),
+                          dir.appendingPathComponent("../Resources/bin/\(name)").standardizedFileURL]
+        for c in candidates where c.path.hasPrefix("/") && FileManager.default.isExecutableFile(atPath: c.path) { return c }
         throw EncodeError("encoder \(name) not found (looked in \(candidates.map(\.path)))")
     }
 }

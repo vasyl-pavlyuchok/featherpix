@@ -10,7 +10,7 @@
 
 **Make your images much lighter, without anyone noticing.** Drop an image or a whole folder and Featherpix converts it to **WebP, AVIF or JPEG** at the quality and width you choose. It's free and open source, works offline, and sends nothing anywhere.
 
-Designed by **Vasyl Pavlyuchok** & **Claude** · v2.0.0
+Designed by **Vasyl Pavlyuchok** & **Claude** · v2.1.0
 
 <p align="center"><img src="docs/ui-results.png" width="560" alt="Featherpix window"></p>
 
@@ -143,6 +143,10 @@ Drag **Featherpix** from Applications to the Trash. If you created the command-l
 
 ## Changelog
 
+### v2.1.0 — 13-nov-2026
+- **WebM** (VP9 + Opus audio) in the Videos tab and `featherpix-cli video -c vp9`. By default it also writes an MP4 fallback and the `<video>` snippet lists both sources (WebM first); `--no-fallback` skips it.
+- Ships a small LGPL ffmpeg built from source at a pinned commit (no network, no GPL parts), run as a separate program. Its license and source are inside the app.
+
 ### v2.0.0 — 13-nov-2026
 - **Videos** tab: MP4 (H.264 or HEVC) for three uses (web, silent hero loop with poster and `<video>` snippet, best quality). Input MP4, MOV, M4V. Uses macOS VideoToolbox: no extra weight, no GPL code. WebM arrives in 2.1.
 - New interface: each tab has its own mood (mint for photos, ember for videos) and an animated savings figure.
@@ -155,4 +159,4 @@ Drag **Featherpix** from Applications to the Trash. If you created the command-l
 
 ## License
 
-[MIT](LICENSE) © 2026 Vasyl Pavlyuchok & Claude. The bundled encoders have their own free licenses (BSD, IJG, zlib): see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Full texts ship inside the app.
+[MIT](LICENSE) © 2026 Vasyl Pavlyuchok & Claude. The bundled encoders have their own free licenses (BSD, IJG, zlib, and LGPL 2.1 for ffmpeg): see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Full texts ship inside the app. ffmpeg (LGPL 2.1+, https://ffmpeg.org) runs as a separate program; its corresponding source is attached to every GitHub release and you may replace it with your own build.

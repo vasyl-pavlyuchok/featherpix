@@ -53,5 +53,14 @@ after="$(cd "$WORK" && find . -path './out-*' -prune -o -type f -name '*' ! -nam
 VER=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$APP/Contents/Info.plist")
 "$CLI" --about | grep -q "$VER" || fail "--about does not show version $VER"
 FORMATS=$("$CLI" --formats)
-for f in WebP AVIF JPEG HEIC MP4; do printf '%s' "$FORMATS" | grep -qi "$f" || fail "--formats misses $f"; done
+for f in WebP AVIF JPEG HEIC MP4 WebM; do printf '%s' "$FORMATS" | grep -qi "$f" || fail "--formats misses $f"; done
+# Installed as a symlink (README) and run from a folder that holds a planted "cwebp": the bundled one must run,
+# never the planted one, never anything from the current directory.
+TRAP="$WORK/trap"; mkdir -p "$TRAP/bin"
+ln -s "$CLI" "$TRAP/bin/featherpix"
+printf '#!/bin/sh\ntouch "%s/PLANTED_RAN"\nexit 0\n' "$TRAP" > "$TRAP/cwebp"; chmod +x "$TRAP/cwebp"
+cp "$WORK/photo-rotated.jpg" "$TRAP/p.jpg"
+(cd "$TRAP" && PATH="$TRAP/bin:$PATH" featherpix -f webp -o "$TRAP/out" p.jpg) > "$WORK/log-symlink" 2>&1 || { cat "$WORK/log-symlink"; fail "CLI via symlink failed"; }
+[[ ! -e "$TRAP/PLANTED_RAN" ]] || fail "a planted encoder in the current folder was executed"
+[[ -s "$TRAP/out/p.webp" ]] || fail "CLI via symlink did not use the bundled encoder"
 echo "SMOKE OK"

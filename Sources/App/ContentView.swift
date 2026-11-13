@@ -268,10 +268,9 @@ struct VideoPanel: View {
                     SectionLabel(text: L.outputFormat)
                     HStack(spacing: 6) {
                         ForEach(VideoCodec.allCases) { c in
-                            Chip(title: c == .h264 ? "MP4" : "HEVC", subtitle: c == .h264 ? "H.264" : "H.265", on: model.codec == c, theme: theme) { model.codec = c }
+                            let (title, sub) = L.codecChip(c)
+                            Chip(title: title, subtitle: sub, on: model.codec == c, theme: theme) { model.codec = c }
                         }
-                        Chip(title: "WebM", subtitle: L.soon, on: false, theme: theme, disabled: true) {}
-                            .help(L.webmSoon)
                     }
                     Text(L.codecHint(model.codec)).font(.system(size: 11)).foregroundStyle(Ink.label)
                 }
