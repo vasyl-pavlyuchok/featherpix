@@ -12,7 +12,8 @@
 
 Diseñado por **Vasyl Pavlyuchok** & **Claude** · v2.1.0
 
-<p align="center"><img src="docs/ui-video-results-es.png" width="560" alt="Ventana de Featherpix"></p>
+<p align="center"><img src="docs/ui-results-es.png" width="420" alt="Featherpix: pestaña Fotos"> <img src="docs/ui-video-webm-results-es.png" width="420" alt="Featherpix: pestaña Vídeos exportando a WebM"></p>
+<p align="center"><sub>Pestaña <b>Fotos</b> (WebP, AVIF, JPEG) y pestaña <b>Vídeos</b> (MP4 o WebM)</sub></p>
 
 ---
 

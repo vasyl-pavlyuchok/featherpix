@@ -12,7 +12,8 @@
 
 Designed by **Vasyl Pavlyuchok** & **Claude** · v2.1.0
 
-<p align="center"><img src="docs/ui-results.png" width="560" alt="Featherpix window"></p>
+<p align="center"><img src="docs/ui-results.png" width="420" alt="Featherpix: Photos tab"> <img src="docs/ui-video-webm-results.png" width="420" alt="Featherpix: Videos tab exporting to WebM"></p>
+<p align="center"><sub><b>Photos</b> tab (WebP, AVIF, JPEG) and <b>Videos</b> tab (MP4 or WebM)</sub></p>
 
 ---
 
