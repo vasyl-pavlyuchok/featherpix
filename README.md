@@ -10,7 +10,7 @@
 
 **Aligera tus imágenes y tus vídeos sin que se note.** Suelta una imagen o una carpeta entera y Featherpix la convierte a **WebP, AVIF o JPEG**; suelta un vídeo y lo deja en un **MP4 o WebM** ligero para la web (H.264, HEVC o VP9), con portada en bucle lista para pegar. Es gratis y de código abierto, funciona sin conexión y no envía nada a ningún sitio.
 
-Diseñado por **Vasyl Pavlyuchok** & **Claude** · v2.1.0
+Diseñado por **Vasyl Pavlyuchok** & **Claude** · v2.1.1
 
 <p align="center"><img src="docs/ui-results-es.png" width="420" alt="Featherpix: pestaña Fotos"> <img src="docs/ui-video-webm-results-es.png" width="420" alt="Featherpix: pestaña Vídeos exportando a WebM"></p>
 <p align="center"><sub>Pestaña <b>Fotos</b> (WebP, AVIF, JPEG) y pestaña <b>Vídeos</b> (MP4 o WebM)</sub></p>
@@ -151,6 +151,9 @@ Arrastra **Featherpix** de Aplicaciones a la Papelera. Si creaste el enlace de l
 - Los codificadores se compilan desde su código fuente en commits fijados, sin binarios de terceros.
 
 ## Changelog
+
+### v2.1.1 — 13-nov-2026
+- La ayuda de `featherpix-cli` indica que los vídeos salen en MP4 o WebM.
 
 ### v2.1.0 — 13-nov-2026
 - **WebM** (VP9 + audio Opus) en la pestaña Vídeos y en `featherpix-cli video -c vp9`. Por defecto añade una copia MP4 de respaldo y el código `<video>` incluye las dos fuentes (WebM primero). `--no-fallback` la omite.

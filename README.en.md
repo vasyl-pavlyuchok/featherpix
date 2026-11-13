@@ -10,7 +10,7 @@
 
 **Make your images much lighter, without anyone noticing.** Drop an image or a whole folder and Featherpix converts it to **WebP, AVIF or JPEG** at the quality and width you choose. It's free and open source, works offline, and sends nothing anywhere.
 
-Designed by **Vasyl Pavlyuchok** & **Claude** · v2.1.0
+Designed by **Vasyl Pavlyuchok** & **Claude** · v2.1.1
 
 <p align="center"><img src="docs/ui-results.png" width="420" alt="Featherpix: Photos tab"> <img src="docs/ui-video-webm-results.png" width="420" alt="Featherpix: Videos tab exporting to WebM"></p>
 <p align="center"><sub><b>Photos</b> tab (WebP, AVIF, JPEG) and <b>Videos</b> tab (MP4 or WebM)</sub></p>
@@ -143,6 +143,9 @@ Drag **Featherpix** from Applications to the Trash. If you created the command-l
 - Encoders are built from source at pinned commits; no third-party binaries.
 
 ## Changelog
+
+### v2.1.1 — 13-nov-2026
+- `featherpix-cli` help now says videos come out as MP4 or WebM.
 
 ### v2.1.0 — 13-nov-2026
 - **WebM** (VP9 + Opus audio) in the Videos tab and `featherpix-cli video -c vp9`. By default it also writes an MP4 fallback and the `<video>` snippet lists both sources (WebM first); `--no-fallback` skips it.

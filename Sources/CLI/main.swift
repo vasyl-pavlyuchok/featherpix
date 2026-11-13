@@ -18,7 +18,7 @@ Usage: featherpix-cli [image] [options] <file-or-folder>...
       --about                   who made Featherpix and how to reach him
   -h, --help
 
-Video options (MP4, MOV, M4V in · MP4 out):
+Video options (MP4, MOV, M4V in · MP4 or WebM out):
   -p, --preset web|loop|max     web = H.264 ≤1920px with audio · loop = silent hero loop ≤1280px
                                 + poster .webp + <video> snippet · max = original size, high bitrate
   -c, --codec h264|hevc|vp9     default h264 (plays everywhere); hevc is smaller, newer browsers;
