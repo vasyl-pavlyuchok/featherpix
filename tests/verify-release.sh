@@ -3,7 +3,7 @@
 # Usage: tests/verify-release.sh [tag] [folder-of-images-for-the-size-check]
 # Downloads into a temp dir; never installs anything, never touches /Applications or the images.
 set -euo pipefail
-TAG="${1:-v1.0.0}"
+TAG="${1:-v$(cat "$(dirname "$0")/../VERSION")}"
 LOTE="${2:-}"
 REPO=vasyl-pavlyuchok/featherpix
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

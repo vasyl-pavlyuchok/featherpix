@@ -10,7 +10,7 @@
 
 **Aligera tus imágenes y tus vídeos sin que se note.** Suelta una imagen o una carpeta entera y Featherpix la convierte a **WebP, AVIF o JPEG**; suelta un vídeo y lo deja en un **MP4** ligero para la web (H.264 o HEVC), con portada en bucle lista para pegar. Es gratis y de código abierto, funciona sin conexión y no envía nada a ningún sitio.
 
-Diseñado por **Vasyl Pavlyuchok** & **Claude** · v1.0.0
+Diseñado por **Vasyl Pavlyuchok** & **Claude** · v2.0.0
 
 <p align="center"><img src="docs/ui-video-results-es.png" width="560" alt="Ventana de Featherpix"></p>
 

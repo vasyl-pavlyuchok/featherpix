@@ -10,7 +10,7 @@
 
 **Make your images much lighter, without anyone noticing.** Drop an image or a whole folder and Featherpix converts it to **WebP, AVIF or JPEG** at the quality and width you choose. It's free and open source, works offline, and sends nothing anywhere.
 
-Designed by **Vasyl Pavlyuchok** & **Claude** · v1.0.0
+Designed by **Vasyl Pavlyuchok** & **Claude** · v2.0.0
 
 <p align="center"><img src="docs/ui-results.png" width="560" alt="Featherpix window"></p>
 

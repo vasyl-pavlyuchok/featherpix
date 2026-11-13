@@ -51,8 +51,10 @@ while !args.isEmpty {
     switch a {
     case "-h", "--help": print(usage); exit(0)
     case "--formats":
-        print("input:  " + FormatsInfo.imageInputs.joined(separator: ", "))
-        print("output: " + FormatsInfo.imageOutputs.joined(separator: ", "))
+        print("images  input:  " + FormatsInfo.imageInputs.joined(separator: ", "))
+        print("        output: " + FormatsInfo.imageOutputs.joined(separator: ", "))
+        print("videos  input:  " + FormatsInfo.videoInputs.joined(separator: ", "))
+        print("        output: " + FormatsInfo.videoOutputs.joined(separator: ", "))
         exit(0)
     case "--about":
         print("Featherpix \(Credits.version) — designed by \(Credits.author)")

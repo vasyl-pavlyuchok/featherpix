@@ -49,4 +49,9 @@ grep -q "^kept  photo-rotated.jpg" "$WORK/log-keep" || { cat "$WORK/log-keep"; f
 after="$(cd "$WORK" && find . -path './out-*' -prune -o -type f -name '*' ! -name 'log-*' -exec shasum {} + | sort)"
 [[ "$before" == "$after" ]] || fail "originals changed"
 ! find "$WORK" -name '.featherpix-*' | grep -q . || fail "temp files left behind"
+# --about and --formats must tell the truth about the bundle
+VER=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$APP/Contents/Info.plist")
+"$CLI" --about | grep -q "$VER" || fail "--about does not show version $VER"
+FORMATS=$("$CLI" --formats)
+for f in WebP AVIF JPEG HEIC MP4; do printf '%s' "$FORMATS" | grep -qi "$f" || fail "--formats misses $f"; done
 echo "SMOKE OK"
