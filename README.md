@@ -8,11 +8,11 @@
 [![Licencia](https://img.shields.io/badge/licencia-MIT-blue)](LICENSE)
 [![macOS](https://img.shields.io/badge/macOS-13%2B%20%C2%B7%20Intel%20%7C%20Apple%20Silicon-black?logo=apple)](../../releases/latest)
 
-**Aligera tus imágenes sin que se note.** Suelta una imagen o una carpeta entera y Featherpix la convierte a **WebP, AVIF o JPEG** con la calidad y el ancho que elijas. Es gratis y de código abierto, funciona sin conexión y no envía nada a ningún sitio.
+**Aligera tus imágenes y tus vídeos sin que se note.** Suelta una imagen o una carpeta entera y Featherpix la convierte a **WebP, AVIF o JPEG**; suelta un vídeo y lo deja en un **MP4** ligero para la web (H.264 o HEVC), con portada en bucle lista para pegar. Es gratis y de código abierto, funciona sin conexión y no envía nada a ningún sitio.
 
 Diseñado por **Vasyl Pavlyuchok** & **Claude** · v1.0.0
 
-<p align="center"><img src="docs/ui-results-es.png" width="560" alt="Ventana de Featherpix"></p>
+<p align="center"><img src="docs/ui-video-results-es.png" width="560" alt="Ventana de Featherpix"></p>
 
 ---
 
@@ -89,6 +89,14 @@ Solo hay que hacerlo una vez. Featherpix **no pide permisos** de accesibilidad, 
 
 Entradas admitidas: JPEG, PNG, HEIC/HEIF, TIFF, WebP, AVIF, GIF (primer fotograma) y BMP.
 
+### Vídeos (desde la v2.0)
+
+- **Entrada:** MP4, MOV y M4V. **Salida:** MP4 con H.264 (se ve en todas partes) o HEVC (un 40 % más ligero en equipos recientes). WebM llega en la v2.1.
+- **Para qué es:** *Web* (≤1920 px, con audio), *Portada en bucle* (≤1280 px, sin audio, con imagen fija `.webp` y el código `<video>` listo para copiar) y *Máxima calidad* (tamaño original).
+- Usa el codificador de vídeo de macOS (VideoToolbox): no añade peso a la app y no incluye código GPL.
+- Respeta la rotación de los vídeos del móvil, coloca el índice al principio del fichero para que empiece a reproducirse antes de descargarse entero, y nunca toca el original.
+- `featherpix-cli video -p loop portada.mp4` hace lo mismo desde la terminal.
+
 ### Línea de comandos
 
 La app incluye `featherpix-cli`:
@@ -142,6 +150,14 @@ Arrastra **Featherpix** de Aplicaciones a la Papelera. Si creaste el enlace de l
 - Los codificadores se compilan desde su código fuente en commits fijados, sin binarios de terceros.
 
 ## Changelog
+
+### v2.0.0 — 13-nov-2026
+- Pestaña **Vídeos**: MP4 (H.264 o HEVC) con tres usos (web, portada en bucle con póster y código HTML, máxima calidad).
+- Interfaz nueva: cada pestaña tiene su propio ambiente (menta para fotos, brasa para vídeos) y una cifra de ahorro animada.
+- Lo que sueltes va solo a su pestaña: imágenes a Fotos, vídeos a Vídeos.
+
+### v1.1.0 — 13-nov-2026
+- Formatos de entrada y salida visibles, firma y contacto, `featherpix-cli --formats` / `--about`.
 
 ### v1.0.0 — 12-nov-2026
 - Primera versión: WebP, AVIF y JPEG; calidad y ancho máximo; imágenes sueltas y carpetas; ajustes rápidos Web, Máxima reducción y Compatible; conservar el original si no se reduce; herramienta de línea de comandos; app universal Intel + Apple Silicon con instalador `.pkg`.

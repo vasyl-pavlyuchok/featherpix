@@ -143,6 +143,14 @@ Drag **Featherpix** from Applications to the Trash. If you created the command-l
 
 ## Changelog
 
+### v2.0.0 — 13-nov-2026
+- **Videos** tab: MP4 (H.264 or HEVC) for three uses (web, silent hero loop with poster and `<video>` snippet, best quality). Input MP4, MOV, M4V. Uses macOS VideoToolbox: no extra weight, no GPL code. WebM arrives in 2.1.
+- New interface: each tab has its own mood (mint for photos, ember for videos) and an animated savings figure.
+- Drops are routed to the right tab automatically.
+
+### v1.1.0 — 13-nov-2026
+- Visible input/output formats, credits and contact, `featherpix-cli --formats` / `--about`.
+
 **v1.0.0 (12 Nov 2026):** first release. WebP, AVIF and JPEG, quality and max width, single images and folders, quick settings, keep-original-if-not-smaller, CLI, universal app with `.pkg` installer. Full changelog in the [Spanish README](README.md#changelog).
 
 ## License

@@ -3,10 +3,10 @@
 🇬🇧 Make your images much lighter without anyone noticing: WebP, AVIF or JPEG, single images or whole folders, drag and drop. Free, open source, offline.
 🇪🇸 Aligera tus imágenes sin que se note: WebP, AVIF o JPEG, imágenes sueltas o carpetas enteras, con arrastrar y soltar. Gratis, de código abierto y sin conexión.
 
-### New in 1.1 · Novedades de la 1.1
+### New in 2.0 · Novedades de la 2.0
 
-🇬🇧 Supported formats shown in the window (in: JPG, PNG, HEIC, TIFF, WebP, AVIF, GIF, BMP · out: WebP, AVIF, JPEG), credits and contact in the window and in About, and `featherpix-cli --formats` / `--about`.
-🇪🇸 Los formatos admitidos se ven en la ventana (entrada: JPG, PNG, HEIC, TIFF, WebP, AVIF, GIF, BMP · salida: WebP, AVIF, JPEG), firma y contacto en la ventana y en «Acerca de», y `featherpix-cli --formats` / `--about`.
+🇬🇧 **Videos tab**: drop an MP4, MOV or M4V and get a light MP4 (H.264 or HEVC) for the web — including a silent hero loop with a poster image and a ready-to-paste `<video>` tag. New interface with a mood per tab and an animated savings figure. Also: visible formats, credits and `featherpix-cli video`.
+🇪🇸 **Pestaña Vídeos**: suelta un MP4, MOV o M4V y obtén un MP4 ligero (H.264 o HEVC) para la web, incluida una portada en bucle sin audio con su imagen fija y el código `<video>` listo para pegar. Interfaz nueva con un ambiente por pestaña y una cifra de ahorro animada. Además: formatos visibles, firma y `featherpix-cli video`.
 
 ### Download · Descarga
 

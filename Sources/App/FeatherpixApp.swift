@@ -10,9 +10,10 @@ struct FeatherpixApp: App {
     var body: some Scene {
         WindowGroup("Featherpix") {
             ContentView(model: AppModel.shared)
-                .frame(minWidth: 560, minHeight: 620)
+                .frame(minWidth: 640, minHeight: 720)
         }
         .windowResizability(.contentMinSize)
+        .windowStyle(.hiddenTitleBar)
         .commands {
             CommandGroup(replacing: .appInfo) {
                 Button(L.t("About Featherpix", "Acerca de Featherpix")) { showAbout() }
@@ -37,7 +38,8 @@ struct FeatherpixApp: App {
 /// Lets people drop files on the Dock icon or use "Open With".
 final class AppDelegate: NSObject, NSApplicationDelegate {
     func application(_ application: NSApplication, open urls: [URL]) {
-        Task { @MainActor in AppModel.shared.start(urls) }
+        // ContentView routes images to Photos and videos to Videos.
+        NotificationCenter.default.post(name: .featherpixOpen, object: urls)
     }
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { true }
 }

@@ -59,6 +59,9 @@ jobs:
         run: scripts/build-app.sh
       - name: Smoke test (CLI on sample images, every format)
         run: tests/smoke.sh build/Featherpix.app
+      # No release without a video test that really ran (council PR117): synthetic clips only, never real footage.
+      - name: Video smoke test (every preset, H.264 and HEVC, rotated, silent, broken file)
+        run: tests/video-smoke.sh build/Featherpix.app
       - uses: actions/upload-artifact@v4
         with:
           name: Featherpix-macOS

@@ -11,7 +11,23 @@ struct Snap {
         _ = NSApplication.shared
         NSApp.appearance = NSAppearance(named: dark ? .darkAqua : .aqua)
         let m = AppModel.shared
-        if CommandLine.arguments.contains("--results") {
+        let videoTab = CommandLine.arguments.contains("--video")
+        UserDefaults.standard.set(videoTab ? "videos" : "photos", forKey: "tab")
+        if videoTab && CommandLine.arguments.contains("--results") {
+            let v = VideoModel.shared
+            v.rows = [VideoRow(name: "portada-gemini.mp4", progress: 1, state: .ok,
+                               detail: "4,1 MB → 612 KB · 1280×720 · 24 fps · MP4 · H.264 · 480 kb/s · sin audio", saved: 0.85)]
+            v.before = 4_100_000; v.after = 612_000
+            v.snippet = "<video autoplay muted loop playsinline preload=\"metadata\" poster=\"portada-gemini-poster.webp\">\n  <source src=\"portada-gemini-loop.mp4\" type=\"video/mp4\">\n</video>"
+            v.lastOutput = URL(fileURLWithPath: "/tmp")
+        }
+        if videoTab && CommandLine.arguments.contains("--working") {
+            let v = VideoModel.shared
+            v.running = true
+            v.rows = [VideoRow(name: "portada-gemini.mp4", progress: 0.62, state: .working),
+                      VideoRow(name: "reel-cliente.mov", state: .waiting)]
+        }
+        if !videoTab && CommandLine.arguments.contains("--results") {
             m.total = 325; m.finished = 325
             var s = Summary()
             for i in 0..<3 {
@@ -24,13 +40,13 @@ struct Snap {
             m.summary = s
             m.lastOutput = URL(fileURLWithPath: "/tmp")
         }
-        let host = NSHostingView(rootView: ContentView(model: m).frame(width: 600, height: m.total > 0 ? 760 : 520).background(Color(nsColor: .windowBackgroundColor)))
+        let host = NSHostingView(rootView: ContentView(model: m).frame(width: 680, height: 780).background(Color(nsColor: .windowBackgroundColor)))
         host.appearance = NSApp.appearance
-        host.frame = NSRect(x: 0, y: 0, width: 600, height: m.total > 0 ? 760 : 520)
+        host.frame = NSRect(x: 0, y: 0, width: 680, height: 780)
         let win = NSWindow(contentRect: host.frame, styleMask: [.titled], backing: .buffered, defer: false)
         win.contentView = host
         host.layoutSubtreeIfNeeded()
-        RunLoop.main.run(until: Date().addingTimeInterval(0.5))
+        RunLoop.main.run(until: Date().addingTimeInterval(2.0))   // let the savings counter finish
         let rep = host.bitmapImageRepForCachingDisplay(in: host.bounds)!
         host.cacheDisplay(in: host.bounds, to: rep)
         try! rep.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: out))

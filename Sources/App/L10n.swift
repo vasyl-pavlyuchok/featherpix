@@ -19,6 +19,37 @@ enum L {
         t("Designed by \(Credits.author).\n\nNeed a custom app for your business? Write to \(Credits.email) with the subject “\(Credits.mailSubject)” and tell me what you need.\n\nFree and open source (MIT).",
           "Diseñado por \(Credits.author).\n\n¿Necesitas una app a medida para tu empresa? Escríbeme a \(Credits.email) con el asunto «\(Credits.mailSubject)» y cuéntame qué necesitas.\n\nGratis y de código abierto (MIT).")
     }
+    static var photos: String { t("Photos", "Fotos") }
+    static var videos: String { t("Videos", "Vídeos") }
+    static var photosTagline: String { t("Lighter images, same look", "Imágenes más ligeras, mismo aspecto") }
+    static var videosTagline: String { t("Lighter videos for the web", "Vídeos ligeros para la web") }
+    static var saved: String { t("SAVED", "AHORRADO") }
+    static var again: String { t("New batch", "Nuevo lote") }
+    static var dropVideoTitle: String { t("Drop videos here", "Suelta aquí tus vídeos") }
+    static var dropVideoHint: String { t("Originals are never touched. Results go next to them as “<name>-web.mp4”.",
+                                         "Los originales no se tocan. El resultado se guarda al lado como «<nombre>-web.mp4».") }
+    static var videoFormatsLine: String { t("In: MP4, MOV, M4V  ·  Out: MP4 (H.264 or HEVC)", "Entrada: MP4, MOV, M4V  ·  Salida: MP4 (H.264 o HEVC)") }
+    static var videoUse: String { t("What is it for?", "¿Para qué es?") }
+    static func videoPreset(_ p: VideoPreset) -> (String, String) {
+        switch p {
+        case .web: return (t("Web", "Web"), t("≤1920 px · with audio", "≤1920 px · con audio"))
+        case .loop: return (t("Hero loop", "Portada en bucle"), t("≤1280 px · silent · poster", "≤1280 px · sin audio · póster"))
+        case .max: return (t("Best quality", "Máxima calidad"), t("original size", "tamaño original"))
+        }
+    }
+    static var outputFormat: String { t("Output", "Salida") }
+    static var soon: String { t("soon", "pronto") }
+    static var webmSoon: String { t("WebM arrives in version 2.1", "WebM llega en la versión 2.1") }
+    static func codecHint(_ c: VideoCodec) -> String {
+        c == .h264 ? t("Plays in every browser and device.", "Se ve en cualquier navegador y dispositivo.")
+                   : t("About 40 % smaller; Safari, Chrome and Edge on recent devices.", "Un 40 % más ligero; Safari, Chrome y Edge en equipos recientes.")
+    }
+    static var keepAudio: String { t("Keep audio", "Conservar el audio") }
+    static var forYourWeb: String { t("Paste into your page", "Para pegar en tu web") }
+    static var copyHTML: String { t("Copy HTML", "Copiar HTML") }
+    static var copied: String { t("Copied ✓", "Copiado ✓") }
+    static var notAVideo: String { t("not a supported video (MP4, MOV, M4V)", "no es un vídeo admitido (MP4, MOV, M4V)") }
+    static var cancelled: String { t("cancelled", "cancelado") }
     static var choose: String { t("Choose…", "Elegir…") }
     static var format: String { t("Format", "Formato") }
     static var quality: String { t("Quality", "Calidad") }
