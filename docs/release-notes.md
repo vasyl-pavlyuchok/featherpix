@@ -3,6 +3,11 @@
 🇬🇧 Make your images much lighter without anyone noticing: WebP, AVIF or JPEG, single images or whole folders, drag and drop. Free, open source, offline.
 🇪🇸 Aligera tus imágenes sin que se note: WebP, AVIF o JPEG, imágenes sueltas o carpetas enteras, con arrastrar y soltar. Gratis, de código abierto y sin conexión.
 
+### New in 1.1 · Novedades de la 1.1
+
+🇬🇧 Supported formats shown in the window (in: JPG, PNG, HEIC, TIFF, WebP, AVIF, GIF, BMP · out: WebP, AVIF, JPEG), credits and contact in the window and in About, and `featherpix-cli --formats` / `--about`.
+🇪🇸 Los formatos admitidos se ven en la ventana (entrada: JPG, PNG, HEIC, TIFF, WebP, AVIF, GIF, BMP · salida: WebP, AVIF, JPEG), firma y contacto en la ventana y en «Acerca de», y `featherpix-cli --formats` / `--about`.
+
 ### Download · Descarga
 
 | | |

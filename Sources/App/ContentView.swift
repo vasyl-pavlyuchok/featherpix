@@ -15,8 +15,26 @@ struct ContentView: View {
             dropZone
             settings
             if model.total > 0 || !model.notes.isEmpty { results }
+            Spacer(minLength: 0)
+            footer
         }
         .padding(20)
+    }
+
+    // MARK: footer (signature + contact)
+    private var footer: some View {
+        HStack(spacing: 6) {
+            Text(L.designedBy).foregroundStyle(.tertiary)
+            Text(Credits.author).fontWeight(.medium).foregroundStyle(.secondary)
+            Spacer()
+            Link(destination: Credits.mailURL) {
+                Label(L.hireMe, systemImage: "envelope")
+            }
+            .foregroundStyle(.secondary)
+            .help(Credits.email)
+        }
+        .font(.caption)
+        .padding(.top, 2)
     }
 
     // MARK: drop zone
@@ -33,13 +51,14 @@ struct ContentView: View {
                     .foregroundStyle(targeted ? Color.accentColor : .secondary)
                 Text(L.dropTitle).font(.title3.weight(.semibold))
                 Text(L.dropHint).font(.callout).foregroundStyle(.secondary).multilineTextAlignment(.center)
+                Text(L.formatsLine).font(.caption).foregroundStyle(.tertiary).multilineTextAlignment(.center)
                 Button(L.choose) { model.chooseInputs() }
                     .controlSize(.large)
                     .disabled(model.running)
             }
             .padding(24)
         }
-        .frame(height: 210)
+        .frame(height: 226)
         .onDrop(of: [UTType.fileURL], isTargeted: $targeted) { providers in
             guard !model.running else { return false }
             var urls: [URL] = []

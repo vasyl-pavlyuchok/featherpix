@@ -13,6 +13,8 @@ Usage: featherpix-cli [options] <file-or-folder>...
   -o, --output DIR              write results here instead of next to the originals
   -j, --jobs N                  images in parallel (default: automatic)
       --keep-larger             keep the result even if it is not smaller
+      --formats                 list supported input and output formats
+      --about                   who made Featherpix and how to reach him
   -h, --help
 
 Files are written next to the originals; a folder is mirrored into "<folder> (Featherpix)".
@@ -23,6 +25,8 @@ var o = Options()
 var qualitySet = false
 var inputs: [URL] = []
 var args = Array(CommandLine.arguments.dropFirst())
+// `featherpix-cli formats` / `featherpix-cli about` only as the sole argument, so a file with that name still works.
+if args.count == 1, ["formats", "about"].contains(args[0]), !FileManager.default.fileExists(atPath: args[0]) { args[0] = "--" + args[0] }
 func die(_ m: String) -> Never { FileHandle.standardError.write(Data("error: \(m)\n".utf8)); exit(2) }
 func next(_ flag: String) -> String { guard !args.isEmpty else { die("\(flag) needs a value") }; return args.removeFirst() }
 
@@ -30,6 +34,15 @@ while !args.isEmpty {
     let a = args.removeFirst()
     switch a {
     case "-h", "--help": print(usage); exit(0)
+    case "--formats":
+        print("input:  " + FormatsInfo.imageInputs.joined(separator: ", "))
+        print("output: " + FormatsInfo.imageOutputs.joined(separator: ", "))
+        exit(0)
+    case "--about":
+        print("Featherpix \(Credits.version) — designed by \(Credits.author)")
+        print("Need a custom app for your business? \(Credits.email) (subject: \(Credits.mailSubject))")
+        print(Credits.repo)
+        exit(0)
     case "-f", "--format":
         guard let f = OutputFormat(rawValue: next(a).lowercased().replacingOccurrences(of: "jpg", with: "jpeg")) else { die("unknown format") }
         o.format = f

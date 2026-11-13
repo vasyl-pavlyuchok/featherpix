@@ -8,6 +8,17 @@ enum L {
     static var dropTitle: String { t("Drop images or folders here", "Suelta aquí imágenes o carpetas") }
     static var dropHint: String { t("Originals are never touched. Folders are copied to “<folder> (Featherpix)”.",
                                     "Los originales no se tocan. Las carpetas se copian en «<carpeta> (Featherpix)».") }
+    static var formatsLine: String {
+        t("In: ", "Entrada: ") + FormatsInfo.imageInputs.joined(separator: ", ")
+            + t("  ·  Out: ", "  ·  Salida: ") + FormatsInfo.imageOutputs.joined(separator: ", ")
+    }
+    static var designedBy: String { t("Designed by", "Diseñado por") }
+    static var hireMe: String { t("Need a custom app for your business? Write to me", "¿Necesitas una app a medida para tu empresa? Escríbeme") }
+    static var hireMeShort: String { t("Custom apps", "Apps a medida") }
+    static var aboutCredits: String {
+        t("Designed by \(Credits.author).\n\nNeed a custom app for your business? Write to \(Credits.email) with the subject “\(Credits.mailSubject)” and tell me what you need.\n\nFree and open source (MIT).",
+          "Diseñado por \(Credits.author).\n\n¿Necesitas una app a medida para tu empresa? Escríbeme a \(Credits.email) con el asunto «\(Credits.mailSubject)» y cuéntame qué necesitas.\n\nGratis y de código abierto (MIT).")
+    }
     static var choose: String { t("Choose…", "Elegir…") }
     static var format: String { t("Format", "Formato") }
     static var quality: String { t("Quality", "Calidad") }

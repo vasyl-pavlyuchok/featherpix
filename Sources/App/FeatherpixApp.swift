@@ -13,6 +13,24 @@ struct FeatherpixApp: App {
                 .frame(minWidth: 560, minHeight: 620)
         }
         .windowResizability(.contentMinSize)
+        .commands {
+            CommandGroup(replacing: .appInfo) {
+                Button(L.t("About Featherpix", "Acerca de Featherpix")) { showAbout() }
+            }
+            CommandGroup(after: .help) {
+                Button(L.hireMe) { NSWorkspace.shared.open(Credits.mailURL) }
+            }
+        }
+    }
+
+    @MainActor private func showAbout() {
+        let credits = NSMutableAttributedString(string: L.aboutCredits, attributes: [
+            .font: NSFont.systemFont(ofSize: 11), .foregroundColor: NSColor.labelColor,
+        ])
+        let r = (credits.string as NSString).range(of: Credits.email)
+        if r.location != NSNotFound { credits.addAttribute(.link, value: Credits.mailURL, range: r) }
+        NSApp.orderFrontStandardAboutPanel(options: [.credits: credits])
+        NSApp.activate(ignoringOtherApps: true)
     }
 }
 
